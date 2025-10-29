@@ -1,5 +1,6 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/database');
+const Categoria = require('./categoria.models');
 const Producto = sequelize.define('Producto', {
     id: {
         type: DataTypes.INTEGER,
@@ -20,5 +21,16 @@ const Producto = sequelize.define('Producto', {
     }
 
 })
+//relacion 1:n (una categoria tiene muchos productos)
+Categoria.hasMany(Producto,
+    {
+        foreignKey: 'categoriaId',
+        as: 'productos'
+    })
+//relacion n:1 (un producto pertenece a una categoria
+Producto.belongsTo(Categoria, {
+    foreignKey: 'categoriaId',
+    as: 'categoria'
+});
 
 module.exports = Producto;
