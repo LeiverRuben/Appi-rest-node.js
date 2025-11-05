@@ -1,7 +1,6 @@
-const categoria = require('../models/categoria.models');
 const express = require('express');
 const router = express.Router();
-const categoriaControllers = require('../controllers/categoriaControllers');
+const categoriaControllers = require('../controllers/categoria.controller');
 router.post('/crear', categoriaControllers.crearCategoria);
 router.get('/listar', categoriaControllers.obtenerCategorias);
 router.get('/:id', categoriaControllers.obtenerCategoriaPorId);

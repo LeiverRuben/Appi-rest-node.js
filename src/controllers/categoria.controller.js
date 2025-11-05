@@ -2,10 +2,11 @@ const categoria = require('../models/categoria.models');
 
 exports.crearCategoria = async (req, res) => {
     try {
-        const { nombre, categoriaID } = req.body;
+        const { nombre, descripcion } = req.body;
         const nuevaCategoria = await categoria.create({
             nombre,
-            categoriaID
+            descripcion
+
         });
         res.status(201).json(nuevaCategoria);
     } catch (error) {
@@ -37,9 +38,11 @@ exports.actualizarCategoria = async (req, res) => {
     try {
         const { id } = req.params;
         const { nombre } = req.body;
+        const { descripcion } = req.body;
         const categoriaEncontrada = await categoria.findByPk(id);
         if (categoriaEncontrada) {
             categoriaEncontrada.nombre = nombre || categoriaEncontrada.nombre;
+            categoriaEncontrada.descripcion = descripcion || categoriaEncontrada.descripcion;
             await categoriaEncontrada.save();
             res.status(200).json(categoriaEncontrada);
         } else {

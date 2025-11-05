@@ -1,8 +1,8 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/database');
-const { categoria } = require('.');
 
-const Categoria = sequelize.define('Categoria', {
+
+const categoria = sequelize.define('categoria', {
     id: {
         type: DataTypes.INTEGER,
         autoIncrement: true,
@@ -17,12 +17,14 @@ const Categoria = sequelize.define('Categoria', {
         allowNull: false,
     },
 })
-categoria.hasMany(Categoria, {
-    foreignKey: 'categoriaID',
+// Optional: autorrelación para subcategorías (mantener si la necesitas)
+categoria.hasMany(categoria, {
+    foreignKey: 'categoriaParentId',
     as: 'subcategorias'
 });
-Categoria.belongsTo(categoria, {
-    foreignKey: 'categoriaID',
+categoria.belongsTo(categoria, {
+    foreignKey: 'categoriaParentId',
     as: 'categoriaPadre'
 });
-module.exports = Categoria;
+
+module.exports = categoria;
