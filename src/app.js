@@ -2,10 +2,11 @@ const express = require('express');
 const app = express();
 const sequelize = require('./config/database');
 const productoRoutes = require('./routes/producto.route');
+const categoriaRoutes = require('./routes/categoria.routes');
 require('dotenv').config();
 app.use(express.json());
 
-
+app.use('/api/categorias', categoriaRoutes);
 app.use('/api/productos', productoRoutes);
 
 (async () => {

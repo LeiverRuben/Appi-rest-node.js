@@ -1,5 +1,6 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/database');
+const { categoria } = require('.');
 
 const Categoria = sequelize.define('Categoria', {
     id: {
@@ -16,5 +17,12 @@ const Categoria = sequelize.define('Categoria', {
         allowNull: false,
     },
 })
-
+categoria.hasMany(Categoria, {
+    foreignKey: 'categoriaID',
+    as: 'subcategorias'
+});
+Categoria.belongsTo(categoria, {
+    foreignKey: 'categoriaID',
+    as: 'categoriaPadre'
+});
 module.exports = Categoria;
