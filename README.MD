@@ -7,7 +7,7 @@ Está desarrollado en Node.js utilizando Express como framework, Sequelize como 
 ## Guia para realizar esta app:
 # Inicializar un repositorio local de Git
 ``` shell
- git init  de m
+ git init 
 ```
 # Instalar las dependencias principales
 

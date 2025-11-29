@@ -9,20 +9,23 @@ app.use(express.json());
 app.use('/api/categorias', categoriaRoutes);
 app.use('/api/productos', productoRoutes);
 
-(async () => {
-    try {
+// Swagger Documentation
+const swaggerUi = require('swagger-ui-express');
+const swaggerSpecs = require('./config/swagger');
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpecs));
+
+(
+    async () => {
         await sequelize.authenticate();
-        console.log('Conexion establecida a la base de datos');
-        await sequelize.sync({ alter: true });
-        console.log('Tablas sincronizadas con la base de datos');
-        const PORT = process.env.PORT || 3000;
-        app.listen(PORT, () => {
-            console.log(`tu server esta corriendo en el puerto ${PORT}`);
-        });
-    } catch (error) {
-        console.error('No se pudo conectar a la base de datos:', error);
-        process.exit(1);
+        console.log("conexion establecida a la base de datos");
+        // Usar force: true solo en desarrollo - ELIMINA Y RECREA las tablas
+        await sequelize.sync({ force: true });
+        console.log("tablas sincronizadas");
+        app.listen(process.env.PORT, () => {
+            console.log("servidor corriendo en el puerto " + process.env.PORT);
+        })
+
     }
-})();
+)();
 
 
