@@ -81,21 +81,56 @@ const generateProductReport = async (req, res) => {
 
         console.log(`Enviando reporte a: ${recipientEmail}`);
 
+        // Generar tabla HTML para el correo
+        const productsTableRows = mappedProducts.map(p => `
+            <tr>
+                <td style="padding: 8px; border-bottom: 1px solid #ddd;">${p.code}</td>
+                <td style="padding: 8px; border-bottom: 1px solid #ddd;">${p.description}</td>
+                <td style="padding: 8px; border-bottom: 1px solid #ddd;">${p.quantity}</td>
+                <td style="padding: 8px; border-bottom: 1px solid #ddd;">$${p.unit_Price}</td>
+                <td style="padding: 8px; border-bottom: 1px solid #ddd;">$${p.total}</td>
+            </tr>
+        `).join('');
+
         const emailResult = await emailService.sendEmail({
             to: recipientEmail,
             subject: '📊 Reporte de Productos e Inventario',
             html: `
-                <h1>Reporte Generado</h1>
-                <p>Adjunto encontrarás el reporte de productos actual.</p>
-                <ul>
-                    <li><strong>Total Productos:</strong> ${productos.length}</li>
-                    <li><strong>Valor Total Inventario:</strong> $${totalValue}</li>
-                </ul>
+                <div style="font-family: Arial, sans-serif; color: #333;">
+                    <h1 style="color: #2c3e50;">Reporte Generado</h1>
+                    <p>Adjunto encontrarás el reporte oficial en PDF.</p>
+                    
+                    <h3 style="margin-top: 20px;">Resumen Rápido:</h3>
+                    <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
+                        <thead>
+                            <tr style="background-color: #f8f9fa; text-align: left;">
+                                <th style="padding: 10px; border-bottom: 2px solid #dee2e6;">ID</th>
+                                <th style="padding: 10px; border-bottom: 2px solid #dee2e6;">Producto</th>
+                                <th style="padding: 10px; border-bottom: 2px solid #dee2e6;">Cant.</th>
+                                <th style="padding: 10px; border-bottom: 2px solid #dee2e6;">P. Unit</th>
+                                <th style="padding: 10px; border-bottom: 2px solid #dee2e6;">Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${productsTableRows}
+                        </tbody>
+                        <tfoot>
+                            <tr style="font-weight: bold; background-color: #f8f9fa;">
+                                <td colspan="4" style="padding: 10px; text-align: right;">Valor Total Inventario:</td>
+                                <td style="padding: 10px;">$${totalValue}</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+
+                    <p style="font-size: 12px; color: #777;">
+                        Total Productos: ${productos.length}
+                    </p>
+                </div>
             `,
             attachments: [
                 {
                     filename: filename,
-                    content: pdfBuffer // Resend acepta Buffer directamente
+                    content: pdfBuffer
                 }
             ]
         });
