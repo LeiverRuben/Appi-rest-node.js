@@ -49,9 +49,12 @@ router.post('/login', controller.login)
  *           schema:
  *             type: object
  *             required:
+ *               - nombre
  *               - email
  *               - password
  *             properties:
+ *               nombre:
+ *                 type: string
  *               email:
  *                 type: string
  *               password:

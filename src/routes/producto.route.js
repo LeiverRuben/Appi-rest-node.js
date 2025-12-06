@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const productoControllers = require('../controllers/productoControllers');
+const authMiddleware = require('../middleware/auth.middleware');
 /**
  * @swagger
  * tags:
@@ -39,11 +40,13 @@ router.post('/crear', productoControllers.crearProductos);
  *   get:
  *     summary: List all products
  *     tags: [Productos]
+ *     security:              # <--- Agrega esto para que Swagger sepa que lleva candado
+ *       - bearerAuth: []
  *     responses:
  *       200:
  *         description: List of products
  */
-router.get('/listar', productoControllers.obtenerProductos);
+router.get('/listar', authMiddleware, productoControllers.obtenerProductos);
 
 /**
  * @swagger

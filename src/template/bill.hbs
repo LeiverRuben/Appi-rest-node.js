@@ -1,0 +1,352 @@
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+
+<style>
+    :root {
+        --color-secondary: rgb(237, 237, 237);
+        --color-main-table: rgb(204, 204, 204);
+    }
+
+    * {
+        font-size: 10px;
+    }
+
+    .logotype {
+        width: 50px !important;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .logotype a img {
+        width: 100%;
+        height: 100%;
+    }
+
+    .margin {
+        width: 100%;
+        height: 20px;
+        background-color: rgb(237, 237, 237);
+    }
+
+    .details {
+        background-color: rgb(237, 237, 237);
+        display: flex;
+        flex-direction: column;
+        padding: 10px;
+        border-radius: 5px;
+    }
+
+    .factura {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .hz {
+        background-color: rgb(237, 237, 237);
+    }
+
+    .container-boards {
+        margin-top: 20px;
+    }
+
+    /* Stayle table */
+    .container-boards .cb-table {
+        width: 100%;
+        border-collapse: collapse;
+        table-layout: fixed;
+
+        min-width: 500px;
+    }
+
+    .container-boards .cb-table .cb-headerTable {
+        border-left: 1px solid white;
+        border-right: 1px solid white;
+    }
+
+    .container-boards .cb-table .cb-headerTable th {
+        text-align: center;
+        background-color: rgb(204, 204, 204);
+        ;
+        max-height: 36px;
+        font-size: 8px;
+        position: sticky;
+        top: 0;
+        left: 0;
+    }
+
+
+    .container-boards .cb-table .txtleng,
+    .container-boards .cb-table .txtleng th {
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+    }
+
+    .container-boards .cb-table tbody tr:nth-child(odd) {
+        background-color: rgba(225, 225, 225, 0.659);
+        ;
+    }
+
+    .container-boards .cb-table tbody tr:nth-child(even) {
+        background-color: #ffffff;
+    }
+
+    .container-boards .cb-table .cb-bodyTable td {
+        text-align: center;
+    }
+
+    /* Footer */
+
+    footer {
+        margin-top: 20px;
+    }
+
+    .fe-card {
+        width: 100%;
+        background-color: rgb(237, 237, 237);
+        position: relative;
+        margin-bottom: 10px;
+    }
+
+    .fe-card .fe-header {
+        width: 100%;
+        background-color: rgb(204, 204, 204);
+        ;
+        font-weight: 700;
+        padding-left: 5px;
+        border-radius: 5px 5px 0 0;
+
+    }
+
+    .fe-card .fe-container {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 5px;
+    }
+
+    footer .details span {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding-top: 1px;
+    }
+
+    footer .details span .sp {
+        width: 100px;
+        background-color: rgb(213, 213, 213);
+        text-align: end;
+    }
+</style>
+<html lang="es">
+<header>
+    <div class="row">
+        <div class="col-6 info-general">
+            <div class="d-flex justify-content-center">
+                <div class="logotype">
+                    <a href="www.yanditv.com">
+                        <img src="../public/assets/logos/logo-ucacue.png" alt="Logo">
+                    </a>
+                </div>
+            </div>
+            <div class="details" style="border-radius: 5px 5px 0 0;">
+                <span>
+                    <b>Emisor: </b> {{ details.nombreComercial}}
+                </span>
+                <span>
+                    <b>RUC: </b> {{details.ruc}}
+                </span>
+                <span>
+                    <b>Matriz: </b>{{details.direccion}}
+                </span>
+                <span>
+                    <b>Correo: </b>{{details.email}}
+                </span>
+                <span>
+                    <b>Teléfono: </b>{{details.phone1}}
+                </span>
+                <span>
+                    <b>Obligado a llevar contabilidad: </b>NO
+                </span>
+                <span>
+                    <b>CONTRIBUYENTE RÉGIMEN RIMPE</b>
+                </span>
+            </div>
+        </div>
+        <div class="col-6">
+            <div>
+                <div class="margin"></div>
+                <div class="factura">
+                    <b>FACTURA:</b>
+                    <b>No.{{serial}}</b>
+                </div>
+                <div class="details">
+                    <span id="code" data-code="{{key}}">
+                        <b>Número de Autorización: </b>{{key}}
+                    </span>
+                    <span>
+                        <b>Fecha y hora de Autorización: </b>{{dateAut}}
+                    </span>
+                    <span>
+                        <b>Ambiente: </b>{{ambiente}}
+                    </span>
+                    <span>
+                        <b>Emisión: </b>NORMAL
+                    </span>
+                    <span class="d-flex justify-content-center align-items-center">
+                        <svg id="barcode"></svg>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="col-12">
+            <div class="row hz">
+                <div class="col-6">
+                    <div class="details">
+                        <span>
+                            <b>Razón Social: </b>{{details.razonSocial}}
+                        </span>
+                        <span>
+                            <b>Dirección: </b>{{details.direccion}}
+                        </span>
+                        <span>
+                            <b>Fecha Emisión: </b>{{date}}
+                        </span>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="details">
+                        <span>
+                            <b>RUC/CI: </b>{{ruc}}
+                        </span>
+                        <span>
+                            <b>Teléfono: </b>{{details.phone1}}
+                        </span>
+                        <span>
+                            <b>Correo: </b>{{customer.email}}
+                        </span>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+<main>
+    <div class="container-boards">
+        <table class="cb-table">
+            <thead class="cb-header">
+                <tr class="cb-headerTable">
+                    <th style="width: 12%;">Código Principal</th>
+                    <th style="width: 7%;">Cantidad</th>
+                    <th style="width: 25%;">Descripción</th>
+                    <th style="width: 10%;">Detalles Adicionales</th>
+                    <th style="width: 10%;">Precio Unitario</th>
+                    <th style="width: 10%;">Descuento</th>
+                    <th style="width: 10%;">Total</th>
+                </tr>
+            </thead>
+            <tbody class="cb-bodyTable">
+                {{#each products}}
+                <tr>
+                    <td> {{this.code}} </td>
+                    <td> {{this.quantity}} </td>
+                    <td> {{this.description}} </td>
+                    <td> {{this.additional_details}} </td>
+                    <td>$ {{this.unit_Price}} </td>
+                    <td>$ {{this.discount}} </td>
+                    <td>$ {{this.total}} </td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    </div>
+</main>
+<footer>
+    <div class="row">
+        <div class="col-6">
+            <div class="fe-card">
+                <label class="fe-header">
+                    <span>Información Adicional</span>
+                </label>
+                <div class="fe-container">
+                    <span>Descripción</span>
+                    <span>compras</span>
+                </div>
+            </div>
+            <div class="fe-card">
+                <label class="fe-header">
+                    <span>Formas de pago</span>
+                </label>
+                <div class="fe-container">
+                    <span>Otros con Utilización del Sistema Financiero</span>
+                    <span>{{this.total}}</span>
+                    <span>0 dias</span>
+                </div>
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="details" style="
+                    padding-right: 0;
+                    padding-top: 0;
+                    padding-bottom: 0;
+                    border-radius: 0;
+                ">
+                <span>
+                    <b>Subtotal Sin Impuestos:</b>
+                    <div class="sp">${{subtotal}}</div>
+                </span>
+                <span>
+                    <b>Subtotal 12%:</b>
+                    <div class="sp">${{tax}}</div>
+                </span>
+                <span>
+                    <b>Subtotal 0%:</b>
+                    <div class="sp">$0.00</div>
+                </span>
+                <span>
+                    <b>Subtotal No Objeto IVA:</b>
+                    <div class="sp">$0.00</div>
+                </span>
+                <span>
+                    <b>Descuentos:</b>
+                    <div class="sp">$0.00</div>
+                </span>
+                <span>
+                    <b>ICE:</b>
+                    <div class="sp">$0.00</div>
+                </span>
+                <span>
+                    <b>IVA 12%:</b>
+                    <div class="sp">${{tax}}</div>
+                </span>
+                <span>
+                    <b>Servicio %:</b>
+                    <div class="sp">$0.00</div>
+                </span>
+                <span>
+                    <b>Valor Total:</b>
+                    <div class="sp">${{totalTax}}</div>
+                </span>
+            </div>
+        </div>
+    </div>
+</footer>
+</body>
+
+<script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
+
+<script>
+    const cod = document.querySelector('#code').dataset.code
+    JsBarcode("#barcode", cod.toString(), {
+        lineColor: "#000",
+        width: 1,
+        fontSize: 10,
+        textAlign: "center"
+    })
+</script>
+
+</html>
